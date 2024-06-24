@@ -36,10 +36,9 @@ chords = {
     "Dm": Chord(['D', 'F', 'A'], ['F', 'Gm', 'Am', 'C', 'Bb']),
 }
 
-notes_order = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
-
 
 def compose_chords(chords_number):
+    """Возвращает список аккордов по квинтовому кругу. Начальный аккорд определяется случайно."""
     # выбираем случайную первую ноту
     start_note = choice(list(chords.keys()))
 

@@ -1,15 +1,12 @@
 import pyflp
-from chords import chords, notes_order, compose_chords
+from chords import compose_chords
+from notes import chords_to_keys
 
 
 # сколько всего аккордов строим
 CHORDS_NUMBER = 8
 
-TEMPO = 100.0
-
-NOTE_LENGTH = 192
-
-NOTES_IN_CHORD = 3
+TEMPO = 200.0
 
 # базовая октава
 OCTAVE_NUMBER = 5
@@ -17,24 +14,19 @@ OCTAVE_NUMBER = 5
 result_chords = compose_chords(CHORDS_NUMBER)
 
 # создаем список нот всех аккордов
-keys = []
-for chord in result_chords:
-    for key in chords[chord].keys:
-        keys.append(key)
+keys = chords_to_keys(result_chords, OCTAVE_NUMBER, add_bass=True, add_high=False, add_middle=True)
 
 
 project = pyflp.parse("base.flp")
 project.tempo = TEMPO
 counter = 0
 for note in project.patterns.current.notes:
-    if counter < CHORDS_NUMBER * NOTES_IN_CHORD:
-        note_key = 12 * OCTAVE_NUMBER + notes_order.index(keys[counter])
-        # если текущая нота ниже базовой ноты аккорда, то сдвигаем её на октаву выше
-        if counter % NOTES_IN_CHORD != 0 and notes_order.index(keys[counter]) < notes_order.index(keys[counter // NOTES_IN_CHORD * NOTES_IN_CHORD]):
-            note_key += 12
-        note.key = note_key
-        note.length = NOTE_LENGTH
-        note.position = counter // NOTES_IN_CHORD * NOTE_LENGTH
+    if counter < len(keys):
+        key = keys[counter]
+        note.key = key.key
+        note.length = key.length
+        note.position = key.position
+        note.velocity = key.velocity
         counter += 1
     else:
         note.position = 0
