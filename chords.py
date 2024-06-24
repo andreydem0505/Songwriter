@@ -1,3 +1,6 @@
+from random import choice
+
+
 class Chord:
     def __init__(self, keys, neighbours):
         # ноты, из которых состоит аккорд
@@ -34,3 +37,42 @@ chords = {
 }
 
 notes_order = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+
+
+def compose_chords(chords_number):
+    # выбираем случайную первую ноту
+    start_note = choice(list(chords.keys()))
+
+    # создаем словарь расстояний до каждой ноты по квинтовому кругу
+    distance_map = dict()
+
+    # расстояние до первой ноты равно 0
+    distance_map[start_note] = 0
+
+    # строим словарь расстояний до остальных нот
+    queue = [start_note]
+    while len(queue) > 0:
+        note = queue.pop(0)
+        for neighbour in chords[note].neighbours:
+            if neighbour not in distance_map.keys():
+                distance_map[neighbour] = distance_map[note] + 1
+                queue.append(neighbour)
+
+    # начинаем выбирать аккорды
+    result_chords = [start_note]
+
+    # counter следит за тем, как далеко мы можем уходить от стартовой ноты
+    counter = chords_number - 1
+    while counter > 0:
+        result_chords.append(
+            # выбираем соседа, подходящего под условие
+            choice(list(filter(
+                # не должны уходить далеко от стартовой ноты, иначе не замкнем круг
+                lambda x: distance_map[x] <= counter and not(distance_map[x] == 0 and counter == 1),
+                chords[result_chords[-1]].neighbours))
+            )
+        )
+        counter -= 1
+
+    print(result_chords)
+    return result_chords
