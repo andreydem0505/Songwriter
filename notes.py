@@ -15,8 +15,8 @@ class Note:
 
 
 def chords_to_keys(source_chords, octave, add_bass=False, add_high=False, add_middle=False):
-    """Принимает список аккордов и октаву, на которой их строить.
-Возвращает список нот в определенном формате."""
+    """Accepts a list of chords and a base octave.
+Returns list of notes in a specific format."""
     keys = []
 
     high_note_length = 48
@@ -24,23 +24,23 @@ def chords_to_keys(source_chords, octave, add_bass=False, add_high=False, add_mi
 
     position = 0
     for chord in source_chords:
-        # добавление нот аккорда
+        # add notes of the chord
         chord_keys = chords[chord].keys
         chord_keys_numbers = []
         for i in range(len(chord_keys)):
             note_key = 12 * octave + notes_order.index(chord_keys[i])
-            # если текущая нота ниже базовой ноты аккорда, то сдвигаем её на октаву выше
+            # if current note is lower than the base note of the chord, shift it one octave up
             if i != 0 and notes_order.index(chord_keys[i]) < notes_order.index(chord_keys[0]):
                 note_key += 12
             chord_keys_numbers.append(Note(position, CHORD_LENGTH, 100, note_key))
 
         keys.extend(chord_keys_numbers)
 
-        # добавление басовой ноты
+        # add bass note
         if add_bass:
             keys.append(Note(position, CHORD_LENGTH, 100, choice([chord_keys_numbers[0], chord_keys_numbers[1]]).key - 12))
 
-        # добавление верхних нот
+        # add high notes
         if add_high and odd_chord:
             high_key = chord_keys_numbers[0].key + 24
             for x in range(position + CHORD_LENGTH // 4, position + CHORD_LENGTH, high_note_length):
@@ -53,7 +53,7 @@ def chords_to_keys(source_chords, octave, add_bass=False, add_high=False, add_mi
                 elif r > 0.7:
                     high_key -= 1
 
-        # добавление средних нот
+        # add middle notes
         if add_middle and not odd_chord:
             if random() > 0.3:
                 start_point = position + CHORD_LENGTH // 4 * randint(2, 3)

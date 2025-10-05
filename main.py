@@ -3,17 +3,16 @@ from chords import compose_chords
 from notes import chords_to_keys
 
 
-# сколько всего аккордов строим
 CHORDS_NUMBER = 8
 
 TEMPO = 200.0
 
-# базовая октава
+# base octave
 OCTAVE_NUMBER = 5
 
 result_chords = compose_chords(CHORDS_NUMBER)
 
-# создаем список нот всех аккордов
+# make list of notes for all chords
 keys = chords_to_keys(result_chords, OCTAVE_NUMBER, add_bass=True, add_high=False, add_middle=True)
 
 

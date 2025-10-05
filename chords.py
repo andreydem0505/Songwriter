@@ -3,9 +3,9 @@ from random import choice
 
 class Chord:
     def __init__(self, keys, neighbours):
-        # ноты, из которых состоит аккорд
+        # notes from which the chord consists
         self.keys = keys
-        # соседи по квинтовому кругу
+        # neighbours on the circle of fifths
         self.neighbours = neighbours
 
 
@@ -38,17 +38,17 @@ chords = {
 
 
 def compose_chords(chords_number):
-    """Возвращает список аккордов по квинтовому кругу. Начальный аккорд определяется случайно."""
-    # выбираем случайную первую ноту
+    """Returns a list of chords based on the circle of fifths. The starting chord is chosen randomly."""
+    # choose the first note randomly
     start_note = choice(list(chords.keys()))
 
-    # создаем словарь расстояний до каждой ноты по квинтовому кругу
+    # make a dictionary of distances from one note to all other notes
     distance_map = dict()
 
-    # расстояние до первой ноты равно 0
+    # distance to the first note equals 0
     distance_map[start_note] = 0
 
-    # строим словарь расстояний до остальных нот
+    # fill dictionary of distances to other notes
     queue = [start_note]
     while len(queue) > 0:
         note = queue.pop(0)
@@ -57,21 +57,20 @@ def compose_chords(chords_number):
                 distance_map[neighbour] = distance_map[note] + 1
                 queue.append(neighbour)
 
-    # начинаем выбирать аккорды
+    # start choosing chords
     result_chords = [start_note]
 
-    # counter следит за тем, как далеко мы можем уходить от стартовой ноты
-    counter = chords_number - 1
-    while counter > 0:
+    # how far we can go from the starting note
+    max_distance = chords_number - 1
+    while max_distance > 0:
         result_chords.append(
-            # выбираем соседа, подходящего под условие
             choice(list(filter(
-                # не должны уходить далеко от стартовой ноты, иначе не замкнем круг
-                lambda x: distance_map[x] <= counter and not(distance_map[x] == 0 and counter == 1),
+                # we can't go far from the starting note, otherwise we shall not close the circle
+                lambda x: distance_map[x] <= max_distance and not(distance_map[x] == 0 and max_distance == 1),
                 chords[result_chords[-1]].neighbours))
             )
         )
-        counter -= 1
+        max_distance -= 1
 
     print(result_chords)
     return result_chords
