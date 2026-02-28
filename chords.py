@@ -2,11 +2,11 @@ from random import choice
 
 
 class Chord:
-    def __init__(self, keys, neighbours):
+    def __init__(self, keys, neighbors):
         # notes from which the chord consists
         self.keys = keys
-        # neighbours on the circle of fifths
-        self.neighbours = neighbours
+        # neighbors on the circle of fifths
+        self.neighbors = neighbors
 
 
 chords = {
@@ -52,10 +52,10 @@ def compose_chords(chords_number):
     queue = [start_note]
     while len(queue) > 0:
         note = queue.pop(0)
-        for neighbour in chords[note].neighbours:
-            if neighbour not in distance_map.keys():
-                distance_map[neighbour] = distance_map[note] + 1
-                queue.append(neighbour)
+        for neighbor in chords[note].neighbors:
+            if neighbor not in distance_map.keys():
+                distance_map[neighbor] = distance_map[note] + 1
+                queue.append(neighbor)
 
     # start choosing chords
     result_chords = [start_note]
@@ -67,7 +67,7 @@ def compose_chords(chords_number):
             choice(list(filter(
                 # we can't go far from the starting note, otherwise we shall not close the circle
                 lambda x: distance_map[x] <= max_distance and not(distance_map[x] == 0 and max_distance == 1),
-                chords[result_chords[-1]].neighbours))
+                chords[result_chords[-1]].neighbors))
             )
         )
         max_distance -= 1

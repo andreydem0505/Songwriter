@@ -3,7 +3,7 @@ from chords import compose_chords
 from notes import chords_to_keys
 
 
-CHORDS_NUMBER = 8
+CHORDS_NUMBER = 16
 
 TEMPO = 200.0
 

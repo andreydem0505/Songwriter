@@ -38,7 +38,7 @@ Returns list of notes in a specific format."""
 
         # add bass note
         if add_bass:
-            keys.append(Note(position, CHORD_LENGTH, 100, choice([chord_keys_numbers[0], chord_keys_numbers[1]]).key - 12))
+            keys.append(Note(position, CHORD_LENGTH, 90, choice([chord_keys_numbers[0], chord_keys_numbers[1]]).key - 12))
 
         # add high notes
         if add_high and odd_chord:
